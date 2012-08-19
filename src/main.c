@@ -185,8 +185,8 @@ int main(int argc, char** argv)
 
             strncpy(data->icon, value, size);
         }
-        else if (strncmp(line, "--icon=", 11) == 0) {
-            char* value = crop_argument(line, 11);
+        else if (strncmp(line, "--icon=", 7) == 0) {
+            char* value = crop_argument(line, 7);
             if (value != NULL)
                 data->icon = value;
         }
