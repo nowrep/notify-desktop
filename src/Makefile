@@ -7,6 +7,8 @@ OBJ = main.o notif.o dbusimp.o
 OBJECTSDIR = ../build
 TARGETDIR = ../bin
 
+DEL_FILE = rm -f
+INSTALL_PROGRAM = install -m 755 -p
 MKDIR = mkdir -p
 CC = c99
 CFLAGS	+= -Wall -pedantic -g $(shell pkg-config --cflags dbus-1)
@@ -23,3 +25,10 @@ $(TARGET): $(OBJECTS)
 
 clean:
 	rm -f $(OBJECTSDIR)/*.o *~ core
+
+install:
+	$(INSTALL_PROGRAM) $(TARGETDIR)/$(TARGET) /usr/bin/$(TARGET)
+    
+uninstall:
+	$(DEL_FILE) /usr/bin/$(TARGET)
+    
