@@ -11,9 +11,14 @@ DEL_FILE = rm -f
 INSTALL_PROGRAM = install -m 755 -p
 MKDIR = mkdir -p
 CC = c99
-CFLAGS	+= -Wall -pedantic -g $(shell pkg-config --cflags dbus-1)
-LDFLAGS	+= -g
+CFLAGS	+= -Wall -pedantic $(shell pkg-config --cflags dbus-1)
 LIBS 	+= $(shell pkg-config --libs dbus-1)
+
+ifeq ($(BUILD),debug)   
+CFLAGS += -O0 -g
+else
+CFLAGS += -O2 -s -DNDEBUG
+endif
 
 OBJECTS = $(patsubst %,$(OBJECTSDIR)/%,$(OBJ))
 
@@ -22,6 +27,9 @@ $(OBJECTSDIR)/%.o: %.c
 
 $(TARGET): $(OBJECTS)
 	$(CC) -o $(TARGETDIR)/$(TARGET) $^ $(CFLAGS) $(LIBS)
+
+debug:
+	make "BUILD=debug"
 
 clean:
 	rm -f $(OBJECTSDIR)/*.o *~ core
