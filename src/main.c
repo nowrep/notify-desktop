@@ -56,20 +56,20 @@ void show_help(void)
             "notify-desktop [OPTION...] <SUMMARY> [BODY] - create a notification\n"
             "\n"
             "Help Options:\n"
-            "  -h, --help                  Show help options\n"
-            "  -v, --version               Version of the application\n"
+            "  -h, --help               Show help options\n"
+            "  -v, --version            Version of the application\n"
             "\n"
             "Application Options:\n"
-            "  -r, --replaces-id=ID        Specified the notifications ID that will be replaced\n"
-            "  -u, --urgency=LEVEL         Specifies the urgency level (low, normal, critical)\n"
-            "  -t, --expire-time=TIME      Specifies the timeout in milliseconds to expire the notification\n"
-            "  -a, --app-name=APP_NAME     Specifies the app name for the icon\n"
-            "  -i, --icon=ICON             Specifies an icon filename or stock icon to display\n"
-            "  -c, --category=TYPE         Specifies the notification category\n"
+            "  -r, --replaces-id=ID     Specified the notifications ID that will be replaced\n"
+            "  -u, --urgency=LEVEL      Specifies the urgency level (low, normal, critical)\n"
+            "  -t, --expire-time=TIME   Specifies the timeout in milliseconds to expire the notification\n"
+            "  -a, --app-name=APP_NAME  Specifies the app name for the icon\n"
+            "  -i, --icon=ICON          Specifies an icon filename or stock icon to display\n"
+            "  -c, --category=TYPE      Specifies the notification category\n"
             "\n"
             "Application Output:\n"
-            "   On success:                Prints ID of sent notification\n"
-            "   On failure:                Prints error\n\n";
+            "   On success:             Prints ID of sent notification and returns 0\n"
+            "   On failure:             Prints error and returns 1\n\n";
 
     printf(help);
 }
