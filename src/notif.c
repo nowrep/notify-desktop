@@ -45,20 +45,11 @@ void notif_free_data(NotifyData* data)
     if (data == NULL)
         return;
 
-    if (data->app_name != NULL)
-        free(data->app_name);
-
-    if (data->icon != NULL)
-        free(data->icon);
-
-    if (data->category != NULL)
-        free(data->category);
-
-    if (data->summary != NULL)
-        free(data->summary);
-
-    if (data->body != NULL)
-        free(data->body);
+    free(data->app_name);
+    free(data->icon);
+    free(data->category);
+    free(data->summary);
+    free(data->body);
 
     free(data);
 }
