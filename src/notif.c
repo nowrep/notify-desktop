@@ -61,23 +61,23 @@ bool notif_validate_data(NotifyData* data)
 
     if (data->summary == NULL)
         return false;
-        
-    // allocate all empty strings with null string
+
+    /* allocate all empty strings with null string */
     if (data->app_name == NULL) {
         data->app_name = (char*) malloc(sizeof(char));
         data->app_name[0] = '\0';
     }
-    
+
     if (data->icon == NULL) {
         data->icon = (char*) malloc(sizeof(char));
         data->icon[0] = '\0';
     }
-    
+
     if (data->category == NULL) {
         data->category = (char*) malloc(sizeof(char));
         data->category[0] = '\0';
     }
-    
+
     if (data->body == NULL) {
         data->body = (char*) malloc(sizeof(char));
         data->body[0] = '\0';
@@ -96,7 +96,7 @@ void notif_print_data(NotifyData* data)
            "  icon: \t\"%s\"\n"
            "  category: \t\"%s\"\n"
            "  summary: \t\"%s\"\n"
-           "  body: \t\"%s\"\n", 
+           "  body: \t\"%s\"\n",
            data->replaces_id,
            data->urgency,
            data->expire_time,
@@ -120,7 +120,7 @@ char* notif_get_error_message(void)
 void notif_free_error_message(void)
 {
     char* message = _notif_get_error_message();
-    
+
     if (message != NULL)
         free(message);
 }

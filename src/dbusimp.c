@@ -37,24 +37,25 @@ static void create_error_message(char* mes)
 
 int _notif_send_notification(NotifyData* data)
 {
-    // DBus code based on tutorial from http://www.matthew.ath.cx/misc/dbus
-    // Thanks!
+    /* DBus code based on tutorial from http://www.matthew.ath.cx/misc/dbus
+     * Thanks!
+     */
 
     DBusMessage* msg;
-    DBusMessageIter args;
+    DBusMessageIter args, actions, hints, hint_1, hint_2, variant_1, variant_2;
     DBusConnection* conn;
     DBusError err;
     DBusPendingCall* pending;
     int ret;
     int sent_id;
-    char errorbuf[255];
+    char errorbuf[255], *tmp_string;
 
     sent_id = -1;
 
-    // initialiset the errors
+    /* initialiset the errors */
     dbus_error_init(&err);
 
-    // connect to the system bus and check for errors
+    /* connect to the system bus and check for errors */
     conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
     if (dbus_error_is_set(&err)) {
         sprintf(errorbuf, "Connection Error (%s)\n", err.message);
@@ -67,7 +68,7 @@ int _notif_send_notification(NotifyData* data)
         return sent_id;
     }
 
-    // request our name on the bus
+    /* request our name on the bus */
     ret = dbus_bus_request_name(conn,
                                 "test.method.caller",
                                 DBUS_NAME_FLAG_REPLACE_EXISTING,
@@ -84,57 +85,55 @@ int _notif_send_notification(NotifyData* data)
         return sent_id;
     }
 
-    // create a new method call and check for errors
-    msg = dbus_message_new_method_call("org.freedesktop.Notifications", // target for the method call
-                                       "/org/freedesktop/Notifications", // object to call on
-                                       "org.freedesktop.Notifications", // interface to call on
-                                       "Notify"); // method name
+    /* create a new method call and check for errors */
+    msg = dbus_message_new_method_call("org.freedesktop.Notifications",  /* target for the method call */
+                                       "/org/freedesktop/Notifications", /* object to call on */
+                                       "org.freedesktop.Notifications",  /* interface to call on */
+                                       "Notify");                        /* method name */
     if (NULL == msg) {
         sprintf(errorbuf, "Message Null\n");
         create_error_message(errorbuf);
         return sent_id;
     }
 
-    // append arguments
+    /* append arguments */
     dbus_message_iter_init_append(msg, &args);
 
-    // app_name	STRING
+    /* app_name	STRING */
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &data->app_name))
         goto oom;
 
-    // replaces_id UINT32
+    /* replaces_id UINT32 */
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_UINT32, &data->replaces_id))
         goto oom;
 
-    // app_icon	STRING
+    /* app_icon	STRING */
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &data->icon))
         goto oom;
 
-    // summary STRING
+    /* summary STRING */
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &data->summary))
         goto oom;
 
-    // body	STRING
+    /* body	STRING */
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &data->body))
         goto oom;
 
-    // actions ARRAY - appending empty array
-    DBusMessageIter actions;
+    /* actions ARRAY - appending empty array */
     if (!dbus_message_iter_open_container(&args,
                                           DBUS_TYPE_ARRAY,
                                           DBUS_TYPE_STRING_AS_STRING,
                                           &actions))
         goto oom;
 
-    char* tmp_string = "";
+    tmp_string = "";
     if (!dbus_message_iter_append_basic(&actions, DBUS_TYPE_STRING, &tmp_string))
         goto oom;
 
     if (!dbus_message_iter_close_container(&args, &actions))
         goto oom;
 
-    // hints DICT
-    DBusMessageIter hints;
+    /* hints DICT */
     if (!dbus_message_iter_open_container(&args,
                                           DBUS_TYPE_ARRAY,
                                           DBUS_DICT_ENTRY_BEGIN_CHAR_AS_STRING
@@ -144,8 +143,7 @@ int _notif_send_notification(NotifyData* data)
                                           &hints))
         goto oom;
 
-    // hint_1 = category: string
-    DBusMessageIter hint_1;
+    /* hint_1 = category: string */
     if (!dbus_message_iter_open_container(&hints, DBUS_TYPE_DICT_ENTRY, NULL, &hint_1))
         goto oom;
 
@@ -153,8 +151,7 @@ int _notif_send_notification(NotifyData* data)
     if (!dbus_message_iter_append_basic(&hint_1, DBUS_TYPE_STRING, &tmp_string))
         goto oom;
 
-    // variant_1 = value: variant
-    DBusMessageIter variant_1;
+    /* variant_1 = value: variant */
     if (!dbus_message_iter_open_container(&hint_1,
                                           DBUS_TYPE_VARIANT,
                                           DBUS_TYPE_STRING_AS_STRING,
@@ -166,14 +163,13 @@ int _notif_send_notification(NotifyData* data)
 
     if (!dbus_message_iter_close_container(&hint_1, &variant_1))
         goto oom;
-    // variant_1
+    /* variant_1 end */
 
     if (!dbus_message_iter_close_container(&hints, &hint_1))
         goto oom;
-    // hint_1
+    /* hint_1 end */
 
-    // hint_2 = urgency: byte
-    DBusMessageIter hint_2;
+    /* hint_2 = urgency: byte */
     if (!dbus_message_iter_open_container(&hints, DBUS_TYPE_DICT_ENTRY, NULL, &hint_2))
         goto oom;
 
@@ -181,8 +177,7 @@ int _notif_send_notification(NotifyData* data)
     if (!dbus_message_iter_append_basic(&hint_2, DBUS_TYPE_STRING, &tmp_string))
         goto oom;
 
-    // variant_2 = value: byte
-    DBusMessageIter variant_2;
+    /* variant_2 = value: byte */
     if (!dbus_message_iter_open_container(&hint_2,
                                           DBUS_TYPE_VARIANT,
                                           DBUS_TYPE_BYTE_AS_STRING,
@@ -194,22 +189,24 @@ int _notif_send_notification(NotifyData* data)
 
     if (!dbus_message_iter_close_container(&hint_2, &variant_2))
         goto oom;
-    // variant_2
+    /* variant_2 end */
 
     if (!dbus_message_iter_close_container(&hints, &hint_2))
         goto oom;
-    // hint_2
+    /* hint_2 end */
 
     if (!dbus_message_iter_close_container(&args, &hints))
         goto oom;
-    // hints
+    /* hints end */
 
-    // expire_timeout INT32
+    /* expire_timeout INT32 */
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &data->expire_time))
         goto oom;
 
-    // send message and get a handle for a reply
-    if (!dbus_connection_send_with_reply (conn, msg, &pending, -1)) // -1 default timeout
+    /* send message and get a handle for a reply
+     *  -1 default timeout
+     */
+    if (!dbus_connection_send_with_reply (conn, msg, &pending, -1))
         goto oom;
 
     if (NULL == pending) {
@@ -219,27 +216,28 @@ int _notif_send_notification(NotifyData* data)
     }
     dbus_connection_flush(conn);
 
-    // free message
+    /* free message */
     dbus_message_unref(msg);
 
-    // block until we recieve a reply
+    /* block until we recieve a reply */
     dbus_pending_call_block(pending);
 
-    // get the reply message
+    /* get the reply message */
     msg = dbus_pending_call_steal_reply(pending);
     if (NULL == msg) {
         sprintf(errorbuf, "Reply Null\n");
         create_error_message(errorbuf);
         return sent_id;
     }
-    // free the pending message handle
+
+    /* free the pending message handle */
     dbus_pending_call_unref(pending);
 
     if (dbus_message_iter_init(msg, &args) &&
         dbus_message_iter_get_arg_type(&args) == DBUS_TYPE_UINT32)
         dbus_message_iter_get_basic(&args, &sent_id);
 
-    // free reply and close connection
+    /* free reply and close connection */
     dbus_message_unref(msg);
 
     return sent_id;

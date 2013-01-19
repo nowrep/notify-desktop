@@ -25,4 +25,4 @@ int _notif_send_notification(NotifyData* data);
 
 char* _notif_get_error_message(void);
 
-#endif //DBUSIMP_H
+#endif /* DBUSIMP_H */

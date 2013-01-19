@@ -10,11 +10,11 @@ TARGETDIR = ../bin
 DEL_FILE = rm -f
 INSTALL_PROGRAM = install -m 755 -p
 MKDIR = mkdir -p
-CC = c99
+CC = cc
 CFLAGS	+= -Wall -pedantic $(shell pkg-config --cflags dbus-1)
 LIBS 	+= $(shell pkg-config --libs dbus-1)
 
-ifeq ($(BUILD),debug)   
+ifeq ($(BUILD),debug)
 CFLAGS += -O0 -g
 else
 CFLAGS += -O2 -s -DNDEBUG
@@ -36,7 +36,7 @@ clean:
 
 install:
 	$(INSTALL_PROGRAM) $(TARGETDIR)/$(TARGET) /usr/bin/$(TARGET)
-    
+
 uninstall:
 	$(DEL_FILE) /usr/bin/$(TARGET)
-    
+

@@ -36,11 +36,12 @@ static int parse_urgency(char* string)
 
 static char* crop_argument(char* source, int offset)
 {
+    char* string;
     size_t size = strlen(source) - offset;
+
     if (size <= 0)
         return NULL;
 
-    char* string;
     string = (char*) malloc(sizeof(char) * (size + 1));
 
     strncpy(string, source + offset, size);
@@ -51,27 +52,24 @@ static char* crop_argument(char* source, int offset)
 
 static void show_help(void)
 {
-    const char* help = ""
-            "Usage:\n"
-            "notify-desktop [OPTION...] <SUMMARY> [BODY] - create a notification\n"
-            "\n"
-            "Help Options:\n"
-            "  -h, --help               Show help options\n"
-            "  -v, --version            Version of the application\n"
-            "\n"
-            "Application Options:\n"
-            "  -r, --replaces-id=ID     Specified the notifications ID that will be replaced\n"
-            "  -u, --urgency=LEVEL      Specifies the urgency level (low, normal, critical)\n"
-            "  -t, --expire-time=TIME   Specifies the timeout in ms to expire the notification\n"
-            "  -a, --app-name=APP_NAME  Specifies the app name for the icon\n"
-            "  -i, --icon=ICON          Specifies an icon filename or stock icon to display\n"
-            "  -c, --category=TYPE      Specifies the notification category\n"
-            "\n"
-            "Application Output:\n"
-            "   On success:             Prints ID of sent notification and returns 0\n"
-            "   On failure:             Prints error and returns 1\n\n";
-
-    printf(help);
+    printf("Usage:\n"
+           "notify-desktop [OPTION...] <SUMMARY> [BODY] - create a notification\n"
+           "\n"
+           "Help Options:\n"
+           "  -h, --help               Show help options\n"
+           "  -v, --version            Version of the application\n"
+           "\n");
+    printf("Application Options:\n"
+           "  -r, --replaces-id=ID     Specified the notifications ID that will be replaced\n"
+           "  -u, --urgency=LEVEL      Specifies the urgency level (low, normal, critical)\n"
+           "  -t, --expire-time=TIME   Specifies the timeout in ms to expire the notification\n"
+           "  -a, --app-name=APP_NAME  Specifies the app name for the icon\n"
+           "  -i, --icon=ICON          Specifies an icon filename or stock icon to display\n"
+           "  -c, --category=TYPE      Specifies the notification category\n"
+           "\n");
+    printf("Application Output:\n"
+           "   On success:             Prints ID of sent notification and returns 0\n"
+           "   On failure:             Prints error and returns 1\n\n");
 }
 
 static void show_version(void)
@@ -81,18 +79,16 @@ static void show_version(void)
 
 int main(int argc, char** argv)
 {
+    int i, return_code = 0;
+    NotifyData *data;
+
     if (argc < 1) {
         show_help();
         return 1;
     }
 
-    int return_code;
-    return_code = 0;
-
-    NotifyData* data;
     data = notif_create_data();
 
-    int i;
     for (i = 1; i < argc; ++i) {
         char* line = argv[i];
         if (strcmp(line, "-h") == 0 || strcmp(line, "--help") == 0) {
@@ -113,35 +109,44 @@ int main(int argc, char** argv)
         }
         else if (strncmp(line, "--replaces-id=", 14) == 0) {
             size_t size = strlen(line) - 14;
+            char *buf;
+
             if (size <= 0)
                 continue;
 
-            char buf[size];
+            buf = (char*) malloc(size + 1);
             strncpy(buf, line + 14, size);
             buf[size - 1] = '\0';
 
             data->replaces_id = atoi(buf);
+            free(buf);
         }
         else if (strcmp(line, "-u") == 0) {
+            int urgency;
             if (argc <= i)
                 continue;
 
-            int urgency = parse_urgency(argv[++i]);
+            urgency = parse_urgency(argv[++i]);
             if (urgency != NOTIF_ERROR)
                 data->urgency = urgency;
         }
         else if (strncmp(line, "--urgency=", 10) == 0) {
             size_t size = strlen(line) - 10;
+            char *buf;
+            int urgency;
+
             if (size <= 0)
                 continue;
 
-            char buf[size];
+            buf = (char*) malloc(size + 1);
             strncpy(buf, line + 10, size);
             buf[size - 1] = '\0';
 
-            int urgency = parse_urgency(buf);
+            urgency = parse_urgency(buf);
             if (urgency != NOTIF_ERROR)
                 data->urgency = urgency;
+
+            free(buf);
         }
         else if (strcmp(line, "-t") == 0) {
             if (argc <= i)
@@ -151,21 +156,27 @@ int main(int argc, char** argv)
         }
         else if (strncmp(line, "--expire-time=", 14) == 0) {
             size_t size = strlen(line) - 14;
+            char *buf;
+
             if (size <= 0)
                 continue;
 
-            char buf[size];
+            buf = (char*) malloc(size + 1);
             strncpy(buf, line + 14, size);
             buf[size - 1] = '\0';
 
             data->expire_time = atoi(buf);
+            free(buf);
         }
         else if (strcmp(line, "-a") == 0) {
+            char *value;
+            size_t size;
+
             if (argc <= i)
                 continue;
 
-            char* value = argv[++i];
-            size_t size = strlen(value) + 1;
+            value = argv[++i];
+            size = strlen(value) + 1;
             data->app_name = (char*) malloc(sizeof(char) * size);
 
             strncpy(data->app_name, value, size);
@@ -176,32 +187,40 @@ int main(int argc, char** argv)
                 data->app_name = name;
         }
         else if (strcmp(line, "-i") == 0) {
+            char *value;
+            size_t size;
+
             if (argc <= i)
                 continue;
 
-            char* value = argv[++i];
-            size_t size = strlen(value) + 1;
+            value = argv[++i];
+            size = strlen(value) + 1;
             data->icon = (char*) malloc(sizeof(char) * size);
 
             strncpy(data->icon, value, size);
         }
         else if (strncmp(line, "--icon=", 7) == 0) {
             char* value = crop_argument(line, 7);
+
             if (value != NULL)
                 data->icon = value;
         }
         else if (strcmp(line, "-c") == 0) {
+            char *value;
+            size_t size;
+
             if (argc <= i)
                 continue;
 
-            char* value = argv[++i];
-            size_t size = strlen(value) + 1;
+            value = argv[++i];
+            size = strlen(value) + 1;
             data->category = (char*) malloc(sizeof(char) * size);
 
             strncpy(data->category, value, size);
         }
         else if (strncmp(line, "--category=", 11) == 0) {
             char* value = crop_argument(line, 11);
+
             if (value != NULL)
                 data->category = value;
         }
@@ -212,14 +231,14 @@ int main(int argc, char** argv)
         }
         else if (data->summary == NULL) {
             size_t size = strlen(line) + 1;
-            data->summary = (char*) malloc(sizeof(char) * size);
 
+            data->summary = (char*) malloc(sizeof(char) * size);
             strncpy(data->summary, line, size);
         }
         else if (data->body == NULL) {
             size_t size = strlen(line) + 1;
-            data->body = (char*) malloc(sizeof(char) * size);
 
+            data->body = (char*) malloc(sizeof(char) * size);
             strncpy(data->body, line, size);
         }
         else {
@@ -229,7 +248,7 @@ int main(int argc, char** argv)
         }
     }
 
-    //notif_print_data(data);
+    /* notif_print_data(data); */
 
     if (return_code == 0 && notif_validate_data(data)) {
         int id;

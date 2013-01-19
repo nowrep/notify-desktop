@@ -50,4 +50,4 @@ int notif_send_notification(NotifyData* data);
 char* notif_get_error_message(void);
 void notif_free_error_message(void);
 
-#endif //NOTIF_H
+#endif /* NOTIF_H */
