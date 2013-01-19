@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int parse_urgency(char* string)
+static int parse_urgency(char* string)
 {
     if (strcmp(string, "low") == 0)
         return NOTIF_URGENCY_LOW;
@@ -34,7 +34,7 @@ int parse_urgency(char* string)
     return NOTIF_ERROR;
 }
 
-char* crop_argument(char* source, int offset)
+static char* crop_argument(char* source, int offset)
 {
     size_t size = strlen(source) - offset;
     if (size <= 0)
@@ -49,7 +49,7 @@ char* crop_argument(char* source, int offset)
     return string;
 }
 
-void show_help(void)
+static void show_help(void)
 {
     const char* help = ""
             "Usage:\n"
@@ -62,7 +62,7 @@ void show_help(void)
             "Application Options:\n"
             "  -r, --replaces-id=ID     Specified the notifications ID that will be replaced\n"
             "  -u, --urgency=LEVEL      Specifies the urgency level (low, normal, critical)\n"
-            "  -t, --expire-time=TIME   Specifies the timeout in milliseconds to expire the notification\n"
+            "  -t, --expire-time=TIME   Specifies the timeout in ms to expire the notification\n"
             "  -a, --app-name=APP_NAME  Specifies the app name for the icon\n"
             "  -i, --icon=ICON          Specifies an icon filename or stock icon to display\n"
             "  -c, --category=TYPE      Specifies the notification category\n"
@@ -74,7 +74,7 @@ void show_help(void)
     printf(help);
 }
 
-void show_version(void)
+static void show_version(void)
 {
     printf("notify-desktop 0.1.0\n");
 }

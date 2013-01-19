@@ -1,3 +1,4 @@
 *.o
 bin/notify-desktop
 core
+*.swp

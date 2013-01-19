@@ -27,7 +27,7 @@
 
 char* _notif_error = NULL;
 
-void create_error_message(char* mes)
+static void create_error_message(char* mes)
 {
     size_t size = strlen(mes) + 1;
 
@@ -39,7 +39,7 @@ int _notif_send_notification(NotifyData* data)
 {
     // DBus code based on tutorial from http://www.matthew.ath.cx/misc/dbus
     // Thanks!
-    
+
     DBusMessage* msg;
     DBusMessageIter args;
     DBusConnection* conn;
@@ -50,7 +50,7 @@ int _notif_send_notification(NotifyData* data)
     char errorbuf[255];
 
     sent_id = -1;
-    
+
     // initialiset the errors
     dbus_error_init(&err);
 
@@ -68,11 +68,11 @@ int _notif_send_notification(NotifyData* data)
     }
 
     // request our name on the bus
-    ret = dbus_bus_request_name(conn, 
+    ret = dbus_bus_request_name(conn,
                                 "test.method.caller",
                                 DBUS_NAME_FLAG_REPLACE_EXISTING,
                                 &err);
-    
+
     if (dbus_error_is_set(&err)) {
         sprintf(errorbuf, "Name Error (%s)\n", err.message);
         dbus_error_free(&err);
@@ -94,26 +94,26 @@ int _notif_send_notification(NotifyData* data)
         create_error_message(errorbuf);
         return sent_id;
     }
-    
+
     // append arguments
     dbus_message_iter_init_append(msg, &args);
-    
+
     // app_name	STRING
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &data->app_name))
         goto oom;
-    
+
     // replaces_id UINT32
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_UINT32, &data->replaces_id))
         goto oom;
-    
+
     // app_icon	STRING
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &data->icon))
         goto oom;
-    
+
     // summary STRING
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &data->summary))
         goto oom;
-    
+
     // body	STRING
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &data->body))
         goto oom;
@@ -132,7 +132,7 @@ int _notif_send_notification(NotifyData* data)
 
     if (!dbus_message_iter_close_container(&args, &actions))
         goto oom;
-    
+
     // hints DICT
     DBusMessageIter hints;
     if (!dbus_message_iter_open_container(&args,
@@ -155,7 +155,7 @@ int _notif_send_notification(NotifyData* data)
 
     // variant_1 = value: variant
     DBusMessageIter variant_1;
-    if (!dbus_message_iter_open_container(&hint_1, 
+    if (!dbus_message_iter_open_container(&hint_1,
                                           DBUS_TYPE_VARIANT,
                                           DBUS_TYPE_STRING_AS_STRING,
                                           &variant_1))
@@ -163,15 +163,15 @@ int _notif_send_notification(NotifyData* data)
 
     if (!dbus_message_iter_append_basic(&variant_1, DBUS_TYPE_STRING, &data->category))
         goto oom;
-        
+
     if (!dbus_message_iter_close_container(&hint_1, &variant_1))
         goto oom;
     // variant_1
-    
+
     if (!dbus_message_iter_close_container(&hints, &hint_1))
         goto oom;
     // hint_1
-    
+
     // hint_2 = urgency: byte
     DBusMessageIter hint_2;
     if (!dbus_message_iter_open_container(&hints, DBUS_TYPE_DICT_ENTRY, NULL, &hint_2))
@@ -191,11 +191,11 @@ int _notif_send_notification(NotifyData* data)
 
     if (!dbus_message_iter_append_basic(&variant_2, DBUS_TYPE_BYTE, &data->urgency))
         goto oom;
-        
+
     if (!dbus_message_iter_close_container(&hint_2, &variant_2))
         goto oom;
     // variant_2
-    
+
     if (!dbus_message_iter_close_container(&hints, &hint_2))
         goto oom;
     // hint_2
@@ -203,15 +203,15 @@ int _notif_send_notification(NotifyData* data)
     if (!dbus_message_iter_close_container(&args, &hints))
         goto oom;
     // hints
-    
+
     // expire_timeout INT32
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &data->expire_time))
         goto oom;
-    
+
     // send message and get a handle for a reply
     if (!dbus_connection_send_with_reply (conn, msg, &pending, -1)) // -1 default timeout
         goto oom;
-        
+
     if (NULL == pending) {
         sprintf(errorbuf, "Pending Call Null\n");
         create_error_message(errorbuf);
@@ -234,7 +234,7 @@ int _notif_send_notification(NotifyData* data)
     }
     // free the pending message handle
     dbus_pending_call_unref(pending);
-    
+
     if (dbus_message_iter_init(msg, &args) &&
         dbus_message_iter_get_arg_type(&args) == DBUS_TYPE_UINT32)
         dbus_message_iter_get_basic(&args, &sent_id);
@@ -243,7 +243,7 @@ int _notif_send_notification(NotifyData* data)
     dbus_message_unref(msg);
 
     return sent_id;
-    
+
 oom:
     sprintf(errorbuf, "Out Of Memory!\n");
     create_error_message(errorbuf);
