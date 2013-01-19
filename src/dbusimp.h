@@ -21,8 +21,8 @@
 
 #include "notif.h"
 
-int _notif_send_notification(NotifyData* data);
+int _notif_send_notification(struct NotifyData *data);
 
-char* _notif_get_error_message(void);
+char *_notif_get_error_message(void);
 
 #endif /* DBUSIMP_H */

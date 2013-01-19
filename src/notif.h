@@ -27,7 +27,7 @@
 
 #define NOTIF_ERROR -1
 
-typedef struct {
+struct NotifyData {
     unsigned int replaces_id;
     unsigned char urgency;
     int expire_time;
@@ -38,16 +38,16 @@ typedef struct {
 
     char* summary;
     char* body;
-} NotifyData;
+};
 
-NotifyData* notif_create_data(void);
-void notif_free_data(NotifyData* data);
+struct NotifyData *notif_create_data(void);
+void notif_free_data(struct NotifyData *data);
 
-bool notif_validate_data(NotifyData* data);
-void notif_print_data(NotifyData* data);
+bool notif_validate_data(struct NotifyData *data);
+void notif_print_data(struct NotifyData *data);
 
-int notif_send_notification(NotifyData* data);
-char* notif_get_error_message(void);
+int notif_send_notification(struct NotifyData *data);
+char *notif_get_error_message(void);
 void notif_free_error_message(void);
 
 #endif /* NOTIF_H */

@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static int parse_urgency(char* string)
+static int parse_urgency(char *string)
 {
     if (strcmp(string, "low") == 0)
         return NOTIF_URGENCY_LOW;
@@ -34,9 +34,9 @@ static int parse_urgency(char* string)
     return NOTIF_ERROR;
 }
 
-static char* crop_argument(char* source, int offset)
+static char *crop_argument(char *source, int offset)
 {
-    char* string;
+    char *string;
     size_t size = strlen(source) - offset;
 
     if (size <= 0)
@@ -77,10 +77,10 @@ static void show_version(void)
     printf("notify-desktop 0.1.0\n");
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
+    struct NotifyData *data;
     int i, return_code = 0;
-    NotifyData *data;
 
     if (argc < 1) {
         show_help();
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
     data = notif_create_data();
 
     for (i = 1; i < argc; ++i) {
-        char* line = argv[i];
+        char *line = argv[i];
         if (strcmp(line, "-h") == 0 || strcmp(line, "--help") == 0) {
             show_help();
             notif_free_data(data);
@@ -182,7 +182,7 @@ int main(int argc, char** argv)
             strncpy(data->app_name, value, size);
         }
         else if (strncmp(line, "--app-name=", 11) == 0) {
-            char* name = crop_argument(line, 11);
+            char *name = crop_argument(line, 11);
             if (name != NULL)
                 data->app_name = name;
         }
@@ -200,7 +200,7 @@ int main(int argc, char** argv)
             strncpy(data->icon, value, size);
         }
         else if (strncmp(line, "--icon=", 7) == 0) {
-            char* value = crop_argument(line, 7);
+            char *value = crop_argument(line, 7);
 
             if (value != NULL)
                 data->icon = value;

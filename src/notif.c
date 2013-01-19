@@ -23,10 +23,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-NotifyData* notif_create_data(void)
+struct NotifyData *notif_create_data(void)
 {
-    NotifyData* data;
-    data = (NotifyData*) malloc(sizeof(NotifyData));
+    struct NotifyData *data;
+    data = (struct NotifyData*) malloc(sizeof(struct NotifyData));
 
     data->replaces_id = 0;
     data->urgency = NOTIF_URGENCY_NORMAL;
@@ -40,7 +40,7 @@ NotifyData* notif_create_data(void)
     return data;
 }
 
-void notif_free_data(NotifyData* data)
+void notif_free_data(struct NotifyData *data)
 {
     if (data == NULL)
         return;
@@ -54,7 +54,7 @@ void notif_free_data(NotifyData* data)
     free(data);
 }
 
-bool notif_validate_data(NotifyData* data)
+bool notif_validate_data(struct NotifyData *data)
 {
     if (data == NULL)
         return false;
@@ -86,7 +86,7 @@ bool notif_validate_data(NotifyData* data)
     return true;
 }
 
-void notif_print_data(NotifyData* data)
+void notif_print_data(struct NotifyData *data)
 {
     printf("> NotifyData:\n"
            "  replaces_id: \t%i\n"
@@ -107,19 +107,19 @@ void notif_print_data(NotifyData* data)
            data->body);
 }
 
-int notif_send_notification(NotifyData* data)
+int notif_send_notification(struct NotifyData *data)
 {
     return _notif_send_notification(data);
 }
 
-char* notif_get_error_message(void)
+char *notif_get_error_message(void)
 {
     return _notif_get_error_message();
 }
 
 void notif_free_error_message(void)
 {
-    char* message = _notif_get_error_message();
+    char *message = _notif_get_error_message();
 
     if (message != NULL)
         free(message);

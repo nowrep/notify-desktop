@@ -25,29 +25,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* _notif_error = NULL;
+static char *_notif_error = NULL;
 
-static void create_error_message(char* mes)
+static void create_error_message(char *mes)
 {
     size_t size = strlen(mes) + 1;
 
-    _notif_error = (char*) malloc(sizeof(char) * size);
+    _notif_error = (char*) malloc(size);
     strncpy(_notif_error, mes, size);
 }
 
-int _notif_send_notification(NotifyData* data)
+int _notif_send_notification(struct NotifyData *data)
 {
     /* DBus code based on tutorial from http://www.matthew.ath.cx/misc/dbus
      * Thanks!
      */
 
-    DBusMessage* msg;
+    DBusMessage *msg;
     DBusMessageIter args, actions, hints, hint_1, hint_2, variant_1, variant_2;
-    DBusConnection* conn;
+    DBusConnection *conn;
     DBusError err;
-    DBusPendingCall* pending;
-    int ret;
-    int sent_id;
+    DBusPendingCall *pending;
+    int ret, sent_id;
     char errorbuf[255], *tmp_string;
 
     sent_id = -1;
@@ -248,7 +247,7 @@ oom:
     return sent_id;
 }
 
-char* _notif_get_error_message(void)
+char *_notif_get_error_message(void)
 {
     return _notif_error;
 }
