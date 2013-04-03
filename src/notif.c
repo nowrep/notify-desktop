@@ -23,6 +23,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct NotifyData {
+    unsigned int replaces_id;
+    unsigned char urgency;
+    int expire_time;
+
+    char* app_name;
+    char* icon;
+    char* category;
+
+    char* summary;
+    char* body;
+};
+
 struct NotifyData *notif_create_data(void)
 {
     struct NotifyData *data;
@@ -52,6 +65,86 @@ void notif_free_data(struct NotifyData *data)
     free(data->body);
 
     free(data);
+}
+
+void notif_set_replaces_id(struct NotifyData *data, unsigned int id)
+{
+    data->replaces_id = id;
+}
+
+void notif_set_urgency(struct NotifyData *data, unsigned char urgency)
+{
+    data->urgency = urgency;
+}
+
+void notif_set_expire_time(struct NotifyData *data, int time)
+{
+    data->expire_time = time;
+}
+
+void notif_set_app_name(struct NotifyData *data, char *name)
+{
+    data->app_name = name;
+}
+
+void notif_set_icon(struct NotifyData *data, char *icon)
+{
+    data->icon = icon;
+}
+
+void notif_set_category(struct NotifyData *data, char *category)
+{
+    data->category = category;
+}
+
+void notif_set_summary(struct NotifyData *data, char *summary)
+{
+    data->summary = summary;
+}
+
+void notif_set_body(struct NotifyData *data, char *body)
+{
+    data->body = body;
+}
+
+unsigned int notif_get_replaces_id(struct NotifyData *data)
+{
+    return data->replaces_id;
+}
+
+unsigned char notif_get_urgency(struct NotifyData *data)
+{
+    return data->urgency;
+}
+
+int notif_get_expire_time(struct NotifyData *data)
+{
+    return data->expire_time;
+}
+
+char *notif_get_app_name(struct NotifyData *data)
+{
+    return data->app_name;
+}
+
+char *notif_get_icon(struct NotifyData *data)
+{
+    return data->icon;
+}
+
+char *notif_get_category(struct NotifyData *data)
+{
+    return data->category;
+}
+
+char *notif_get_summary(struct NotifyData *data)
+{
+    return data->summary;
+}
+
+char *notif_get_body(struct NotifyData *data)
+{
+    return data->body;
 }
 
 bool notif_validate_data(struct NotifyData *data)

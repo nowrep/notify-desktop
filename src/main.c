@@ -105,21 +105,21 @@ int main(int argc, char **argv)
             if (argc <= i)
                 continue;
 
-            data->replaces_id = atoi(argv[++i]);
+            notif_set_replaces_id(data, atoi(argv[++i]));
         }
         else if (strncmp(line, "--replaces-id=", 14) == 0) {
             size_t size = strlen(line) - 14;
-            char *buf;
+            char *buff;
 
             if (size <= 0)
                 continue;
 
-            buf = (char*) malloc(size + 1);
-            strncpy(buf, line + 14, size);
-            buf[size - 1] = '\0';
+            buff = (char*) malloc(size + 1);
+            strncpy(buff, line + 14, size);
+            buff[size - 1] = '\0';
 
-            data->replaces_id = atoi(buf);
-            free(buf);
+            notif_set_replaces_id(data, atoi(buff));
+            free(buff);
         }
         else if (strcmp(line, "-u") == 0) {
             int urgency;
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
             urgency = parse_urgency(argv[++i]);
             if (urgency != NOTIF_ERROR)
-                data->urgency = urgency;
+                notif_set_urgency(data, urgency);
         }
         else if (strncmp(line, "--urgency=", 10) == 0) {
             size_t size = strlen(line) - 10;
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 
             urgency = parse_urgency(buf);
             if (urgency != NOTIF_ERROR)
-                data->urgency = urgency;
+                notif_set_urgency(data, urgency);
 
             free(buf);
         }
@@ -152,24 +152,24 @@ int main(int argc, char **argv)
             if (argc <= i)
                 continue;
 
-            data->expire_time = atoi(argv[++i]);
+            notif_set_expire_time(data, atoi(argv[++i]));
         }
         else if (strncmp(line, "--expire-time=", 14) == 0) {
             size_t size = strlen(line) - 14;
-            char *buf;
+            char *buff;
 
             if (size <= 0)
                 continue;
 
-            buf = (char*) malloc(size + 1);
-            strncpy(buf, line + 14, size);
-            buf[size - 1] = '\0';
+            buff = (char*) malloc(size + 1);
+            strncpy(buff, line + 14, size);
+            buff[size - 1] = '\0';
 
-            data->expire_time = atoi(buf);
-            free(buf);
+            notif_set_expire_time(data, atoi(buff));
+            free(buff);
         }
         else if (strcmp(line, "-a") == 0) {
-            char *value;
+            char *value, *buff;
             size_t size;
 
             if (argc <= i)
@@ -177,17 +177,18 @@ int main(int argc, char **argv)
 
             value = argv[++i];
             size = strlen(value) + 1;
-            data->app_name = (char*) malloc(sizeof(char) * size);
+            buff = (char*) malloc(sizeof(char) * size);
 
-            strncpy(data->app_name, value, size);
+            strncpy(buff, value, size);
+            notif_set_app_name(data, buff);
         }
         else if (strncmp(line, "--app-name=", 11) == 0) {
             char *name = crop_argument(line, 11);
             if (name != NULL)
-                data->app_name = name;
+                notif_set_app_name(data, name);
         }
         else if (strcmp(line, "-i") == 0) {
-            char *value;
+            char *value, *buff;
             size_t size;
 
             if (argc <= i)
@@ -195,18 +196,19 @@ int main(int argc, char **argv)
 
             value = argv[++i];
             size = strlen(value) + 1;
-            data->icon = (char*) malloc(sizeof(char) * size);
+            buff = (char*) malloc(sizeof(char) * size);
 
-            strncpy(data->icon, value, size);
+            strncpy(buff, value, size);
+            notif_set_icon(data, buff);
         }
         else if (strncmp(line, "--icon=", 7) == 0) {
-            char *value = crop_argument(line, 7);
+            char *icon = crop_argument(line, 7);
 
-            if (value != NULL)
-                data->icon = value;
+            if (icon != NULL)
+                notif_set_icon(data, icon);
         }
         else if (strcmp(line, "-c") == 0) {
-            char *value;
+            char *value, *buff;
             size_t size;
 
             if (argc <= i)
@@ -214,32 +216,37 @@ int main(int argc, char **argv)
 
             value = argv[++i];
             size = strlen(value) + 1;
-            data->category = (char*) malloc(sizeof(char) * size);
+            buff = (char*) malloc(sizeof(char) * size);
 
-            strncpy(data->category, value, size);
+            strncpy(buff, value, size);
+            notif_set_category(data, buff);
         }
         else if (strncmp(line, "--category=", 11) == 0) {
             char* value = crop_argument(line, 11);
 
             if (value != NULL)
-                data->category = value;
+                notif_set_category(data, value);
         }
         else if (strncmp(line, "-", 1) == 0) {
             printf("Unknown option \"%s\"", line);
             return_code = 1;
             break;
         }
-        else if (data->summary == NULL) {
+        else if (notif_get_summary(data) == NULL) {
+            char *buff;
             size_t size = strlen(line) + 1;
 
-            data->summary = (char*) malloc(sizeof(char) * size);
-            strncpy(data->summary, line, size);
+            buff = (char*) malloc(sizeof(char) * size);
+            strncpy(buff, line, size);
+            notif_set_summary(data, buff);
         }
-        else if (data->body == NULL) {
+        else if (notif_get_body(data) == NULL) {
+            char *buff;
             size_t size = strlen(line) + 1;
 
-            data->body = (char*) malloc(sizeof(char) * size);
-            strncpy(data->body, line, size);
+            buff = (char*) malloc(sizeof(char) * size);
+            strncpy(buff, line, size);
+            notif_set_body(data, buff);
         }
         else {
             printf("Too many arguments!\n");

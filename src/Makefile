@@ -11,7 +11,7 @@ DEL_FILE = rm -f
 INSTALL_PROGRAM = install -m 755 -p
 MKDIR = mkdir -p
 CC = cc
-CFLAGS	+= -Wall -pedantic $(shell pkg-config --cflags dbus-1)
+CFLAGS	+= -Wall -Wextra -pedantic $(shell pkg-config --cflags dbus-1)
 LIBS 	+= $(shell pkg-config --libs dbus-1)
 
 ifeq ($(BUILD),debug)

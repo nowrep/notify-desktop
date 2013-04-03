@@ -27,21 +27,28 @@
 
 #define NOTIF_ERROR -1
 
-struct NotifyData {
-    unsigned int replaces_id;
-    unsigned char urgency;
-    int expire_time;
-
-    char* app_name;
-    char* icon;
-    char* category;
-
-    char* summary;
-    char* body;
-};
+typedef void NotifyData;
 
 struct NotifyData *notif_create_data(void);
 void notif_free_data(struct NotifyData *data);
+
+void notif_set_replaces_id(struct NotifyData *data, unsigned int id);
+void notif_set_urgency(struct NotifyData *data, unsigned char urgency);
+void notif_set_expire_time(struct NotifyData *data, int time);
+void notif_set_app_name(struct NotifyData *data, char *name);
+void notif_set_icon(struct NotifyData *data, char *icon);
+void notif_set_category(struct NotifyData *data, char *category);
+void notif_set_summary(struct NotifyData *data, char *summary);
+void notif_set_body(struct NotifyData *data, char *body);
+
+unsigned int notif_get_replaces_id(struct NotifyData *data);
+unsigned char notif_get_urgency(struct NotifyData *data);
+int notif_get_expire_time(struct NotifyData *data);
+char *notif_get_app_name(struct NotifyData *data);
+char *notif_get_icon(struct NotifyData *data);
+char *notif_get_category(struct NotifyData *data);
+char *notif_get_summary(struct NotifyData *data);
+char *notif_get_body(struct NotifyData *data);
 
 bool notif_validate_data(struct NotifyData *data);
 void notif_print_data(struct NotifyData *data);
