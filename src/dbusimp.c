@@ -1,6 +1,6 @@
 /* ============================================================
 * notify-desktop - sends desktop notifications
-* Copyright (C) 2012  David Rosca <nowrep@gmail.com>
+* Copyright (C) 2012-2013 David Rosca <nowrep@gmail.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ int _notif_send_notification(struct NotifyData *data)
 
     sent_id = -1;
 
-    /* initialiset the errors */
+    /* initialise the errors */
     dbus_error_init(&err);
 
     /* connect to the system bus and check for errors */
@@ -104,7 +104,7 @@ int _notif_send_notification(struct NotifyData *data)
     /* append arguments */
     dbus_message_iter_init_append(msg, &args);
 
-    /* app_name	STRING */
+    /* app_name STRING */
     tmp_string = notif_get_app_name(data);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &tmp_string))
         goto oom;
@@ -114,7 +114,7 @@ int _notif_send_notification(struct NotifyData *data)
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_UINT32, &replaces_id))
         goto oom;
 
-    /* app_icon	STRING */
+    /* app_icon STRING */
     tmp_string = notif_get_icon(data);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &tmp_string))
         goto oom;
@@ -238,7 +238,7 @@ int _notif_send_notification(struct NotifyData *data)
     /* free message */
     dbus_message_unref(msg);
 
-    /* block until we recieve a reply */
+    /* block until we receive a reply */
     dbus_pending_call_block(pending);
 
     /* get the reply message */

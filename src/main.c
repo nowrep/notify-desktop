@@ -1,6 +1,6 @@
 /* ============================================================
 * notify-desktop - sends desktop notifications
-* Copyright (C) 2012  David Rosca <nowrep@gmail.com>
+* Copyright (C) 2012-2013 David Rosca <nowrep@gmail.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ static void show_help(void)
 
 static void show_version(void)
 {
-    printf("notify-desktop 0.1.0\n");
+    printf("notify-desktop 0.1.1\n");
 }
 
 int main(int argc, char **argv)
