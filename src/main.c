@@ -1,6 +1,6 @@
 /* ============================================================
 * notify-desktop - sends desktop notifications
-* Copyright (C) 2012-2013 David Rosca <nowrep@gmail.com>
+* Copyright (C) 2012-2014 David Rosca <nowrep@gmail.com>
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ static void show_help(void)
            "  -v, --version            Version of the application\n"
            "\n");
     printf("Application Options:\n"
-           "  -r, --replaces-id=ID     Specified the notifications ID that will be replaced\n"
+           "  -r, --replaces-id=ID     Specifies the notifications ID that will be replaced\n"
            "  -u, --urgency=LEVEL      Specifies the urgency level (low, normal, critical)\n"
            "  -t, --expire-time=TIME   Specifies the timeout in ms to expire the notification\n"
            "  -a, --app-name=APP_NAME  Specifies the app name for the icon\n"
