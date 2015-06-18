@@ -1,7 +1,3 @@
-#############################################################################
-# Makefile for building: notify-desktop
-#############################################################################
-
 TARGET = notify-desktop
 OBJ = main.o notif.o dbusimp.o
 OBJECTSDIR = ../build
@@ -9,7 +5,6 @@ TARGETDIR = ../bin
 
 DEL_FILE = rm -f
 INSTALL_PROGRAM = install -m 755 -p
-MKDIR = mkdir -p
 CC = cc
 CFLAGS	+= -Wall -Wextra -pedantic $(shell pkg-config --cflags dbus-1)
 LIBS 	+= $(shell pkg-config --libs dbus-1)
