@@ -35,26 +35,26 @@ void notif_free_data(struct NotifyData *data);
 void notif_set_replaces_id(struct NotifyData *data, unsigned int id);
 void notif_set_urgency(struct NotifyData *data, unsigned char urgency);
 void notif_set_expire_time(struct NotifyData *data, int time);
-void notif_set_app_name(struct NotifyData *data, char *name);
-void notif_set_icon(struct NotifyData *data, char *icon);
-void notif_set_category(struct NotifyData *data, char *category);
-void notif_set_summary(struct NotifyData *data, char *summary);
-void notif_set_body(struct NotifyData *data, char *body);
+void notif_set_app_name(struct NotifyData *data, const char *name);
+void notif_set_icon(struct NotifyData *data, const char *icon);
+void notif_set_category(struct NotifyData *data, const char *category);
+void notif_set_summary(struct NotifyData *data, const char *summary);
+void notif_set_body(struct NotifyData *data, const char *body);
 
 unsigned int notif_get_replaces_id(struct NotifyData *data);
 unsigned char notif_get_urgency(struct NotifyData *data);
 int notif_get_expire_time(struct NotifyData *data);
-char *notif_get_app_name(struct NotifyData *data);
-char *notif_get_icon(struct NotifyData *data);
-char *notif_get_category(struct NotifyData *data);
-char *notif_get_summary(struct NotifyData *data);
-char *notif_get_body(struct NotifyData *data);
+const char *notif_get_app_name(struct NotifyData *data);
+const char *notif_get_icon(struct NotifyData *data);
+const char *notif_get_category(struct NotifyData *data);
+const char *notif_get_summary(struct NotifyData *data);
+const char *notif_get_body(struct NotifyData *data);
 
 bool notif_validate_data(struct NotifyData *data);
 void notif_print_data(struct NotifyData *data);
 
 int notif_send_notification(struct NotifyData *data);
-char *notif_get_error_message(void);
+const char *notif_get_error_message(void);
 void notif_free_error_message(void);
 
 #endif /* NOTIF_H */

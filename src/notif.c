@@ -82,27 +82,27 @@ void notif_set_expire_time(struct NotifyData *data, int time)
     data->expire_time = time;
 }
 
-void notif_set_app_name(struct NotifyData *data, char *name)
+void notif_set_app_name(struct NotifyData *data, const char *name)
 {
     data->app_name = strdup(name);
 }
 
-void notif_set_icon(struct NotifyData *data, char *icon)
+void notif_set_icon(struct NotifyData *data, const char *icon)
 {
     data->icon = strdup(icon);
 }
 
-void notif_set_category(struct NotifyData *data, char *category)
+void notif_set_category(struct NotifyData *data, const char *category)
 {
     data->category = strdup(category);
 }
 
-void notif_set_summary(struct NotifyData *data, char *summary)
+void notif_set_summary(struct NotifyData *data, const char *summary)
 {
     data->summary = strdup(summary);
 }
 
-void notif_set_body(struct NotifyData *data, char *body)
+void notif_set_body(struct NotifyData *data, const char *body)
 {
     data->body = strdup(body);
 }
@@ -122,27 +122,27 @@ int notif_get_expire_time(struct NotifyData *data)
     return data->expire_time;
 }
 
-char *notif_get_app_name(struct NotifyData *data)
+const char *notif_get_app_name(struct NotifyData *data)
 {
     return data->app_name;
 }
 
-char *notif_get_icon(struct NotifyData *data)
+const char *notif_get_icon(struct NotifyData *data)
 {
     return data->icon;
 }
 
-char *notif_get_category(struct NotifyData *data)
+const char *notif_get_category(struct NotifyData *data)
 {
     return data->category;
 }
 
-char *notif_get_summary(struct NotifyData *data)
+const char *notif_get_summary(struct NotifyData *data)
 {
     return data->summary;
 }
 
-char *notif_get_body(struct NotifyData *data)
+const char *notif_get_body(struct NotifyData *data)
 {
     return data->body;
 }
@@ -205,16 +205,13 @@ int notif_send_notification(struct NotifyData *data)
     return _notif_send_notification(data);
 }
 
-char *notif_get_error_message(void)
+const char *notif_get_error_message(void)
 {
     return _notif_get_error_message();
 }
 
 void notif_free_error_message(void)
 {
-    char *message = _notif_get_error_message();
-
-    if (message != NULL)
-        free(message);
+    _notif_free_error_message();
 }
 

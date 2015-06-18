@@ -47,7 +47,8 @@ int _notif_send_notification(struct NotifyData *data)
     DBusError err;
     DBusPendingCall *pending;
     int ret, sent_id;
-    char errorbuf[255], *tmp_string;
+    char errorbuf[255];
+    const char *tmp_string;
     unsigned int replaces_id;
     unsigned char urgency;
     int expire_time;
@@ -267,7 +268,13 @@ oom:
     return sent_id;
 }
 
-char *_notif_get_error_message(void)
+const char *_notif_get_error_message(void)
 {
     return _notif_error;
 }
+
+void _notif_free_error_message(void)
+{
+    free(_notif_error);
+}
+

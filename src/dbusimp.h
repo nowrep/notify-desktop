@@ -23,6 +23,7 @@
 
 int _notif_send_notification(struct NotifyData *data);
 
-char *_notif_get_error_message(void);
+const char *_notif_get_error_message(void);
+void _notif_free_error_message(void);
 
 #endif /* DBUSIMP_H */
