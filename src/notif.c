@@ -84,27 +84,27 @@ void notif_set_expire_time(struct NotifyData *data, int time)
 
 void notif_set_app_name(struct NotifyData *data, char *name)
 {
-    data->app_name = name;
+    data->app_name = strdup(name);
 }
 
 void notif_set_icon(struct NotifyData *data, char *icon)
 {
-    data->icon = icon;
+    data->icon = strdup(icon);
 }
 
 void notif_set_category(struct NotifyData *data, char *category)
 {
-    data->category = category;
+    data->category = strdup(category);
 }
 
 void notif_set_summary(struct NotifyData *data, char *summary)
 {
-    data->summary = summary;
+    data->summary = strdup(summary);
 }
 
 void notif_set_body(struct NotifyData *data, char *body)
 {
-    data->body = body;
+    data->body = strdup(body);
 }
 
 unsigned int notif_get_replaces_id(struct NotifyData *data)
