@@ -54,7 +54,8 @@ static void show_help(void)
            "\n");
     printf("Application Output:\n"
            "   On success:             Prints ID of sent notification and returns 0\n"
-           "   On failure:             Prints error and returns 1\n\n");
+           "   On failure:             Prints error and returns 1\n"
+           "\n");
 }
 
 static void show_version(void)
@@ -86,7 +87,7 @@ int main(int argc, char **argv)
 
     data = notif_create_data();
 
-    /* Options */
+    /* options */
     while ((opt = getopt_long(argc, argv,"hvr:u:t:a:i:c:", options, NULL )) != -1) {
         switch (opt) {
         case 'h' :
@@ -134,7 +135,7 @@ int main(int argc, char **argv)
         }
     }
 
-    /* Summary + Body */
+    /* summary + body */
     for (; optind < argc; ++optind) {
         if (notif_get_summary(data) == NULL) {
             notif_set_summary(data, argv[optind]);

@@ -37,7 +37,8 @@ static void create_error_message(char *mes)
 
 int _notif_send_notification(struct NotifyData *data)
 {
-    /* DBus code based on tutorial from http://www.matthew.ath.cx/misc/dbus
+    /*
+     * DBus code based on tutorial from http://www.matthew.ath.cx/misc/dbus
      * Thanks!
      */
 
@@ -89,13 +90,9 @@ int _notif_send_notification(struct NotifyData *data)
     }
 
     msg = dbus_message_new_method_call("org.freedesktop.Notifications",
-                                       /* target for the method call */
                                        "/org/freedesktop/Notifications",
-                                       /* object to call on */
                                        "org.freedesktop.Notifications",
-                                       /* interface to call on */
                                        "Notify");
-                                       /* method name */
     if (NULL == msg) {
         sprintf(errorbuf, "Message Null\n");
         create_error_message(errorbuf);
@@ -223,9 +220,7 @@ int _notif_send_notification(struct NotifyData *data)
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &expire_time))
         goto oom;
 
-    /* send message and get a handle for a reply
-     *  -1 default timeout
-     */
+    /* send message and get a handle for a reply (-1 default timeout) */
     if (!dbus_connection_send_with_reply (conn, msg, &pending, -1))
         goto oom;
 

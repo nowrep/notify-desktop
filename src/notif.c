@@ -28,12 +28,11 @@ struct NotifyData {
     unsigned char urgency;
     int expire_time;
 
-    char* app_name;
-    char* icon;
-    char* category;
-
-    char* summary;
-    char* body;
+    char *app_name;
+    char *icon;
+    char *category;
+    char *summary;
+    char *body;
 };
 
 struct NotifyData *notif_create_data(void)
