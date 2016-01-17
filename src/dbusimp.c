@@ -133,12 +133,6 @@ int _notif_send_notification(struct NotifyData *data)
                                           DBUS_TYPE_STRING_AS_STRING,
                                           &actions))
         goto oom;
-
-    tmp_string = "";
-    if (!dbus_message_iter_append_basic(&actions, DBUS_TYPE_STRING,
-                                        &tmp_string))
-        goto oom;
-
     if (!dbus_message_iter_close_container(&args, &actions))
         goto oom;
 
