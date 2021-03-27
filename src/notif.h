@@ -20,6 +20,8 @@
 #define NOTIF_H
 
 #include <stdbool.h>
+#define _POSIX_C_SOURCE 200809
+#include <stdio.h>
 
 #define NOTIF_URGENCY_LOW 0
 #define NOTIF_URGENCY_NORMAL 1
@@ -33,10 +35,12 @@ struct NotifyData *notif_create_data(void);
 void notif_free_data(struct NotifyData *data);
 
 void notif_set_replaces_id(struct NotifyData *data, unsigned int id);
+void notif_set_replaces_id_from_file(struct NotifyData *data);
 void notif_set_urgency(struct NotifyData *data, unsigned char urgency);
 void notif_set_expire_time(struct NotifyData *data, int time);
 void notif_set_app_name(struct NotifyData *data, const char *name);
 void notif_set_icon(struct NotifyData *data, const char *icon);
+void notif_set_id_file(struct NotifyData *data, FILE *file);
 void notif_set_category(struct NotifyData *data, const char *category);
 void notif_set_summary(struct NotifyData *data, const char *summary);
 void notif_set_body(struct NotifyData *data, const char *body);
@@ -44,6 +48,7 @@ void notif_set_body(struct NotifyData *data, const char *body);
 unsigned int notif_get_replaces_id(struct NotifyData *data);
 unsigned char notif_get_urgency(struct NotifyData *data);
 int notif_get_expire_time(struct NotifyData *data);
+FILE *notif_get_id_file(struct NotifyData *data);
 const char *notif_get_app_name(struct NotifyData *data);
 const char *notif_get_icon(struct NotifyData *data);
 const char *notif_get_category(struct NotifyData *data);

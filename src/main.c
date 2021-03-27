@@ -46,6 +46,7 @@ static void show_help(void)
            "\n");
     printf("Application Options:\n"
            "  -r, --replaces-id=ID     Specifies the notifications ID that will be replaced\n"
+           "  -R, --id-file=PATH       Specifies the path to a file for storing the id that will be replace\n"
            "  -u, --urgency=LEVEL      Specifies the urgency level (low, normal, critical)\n"
            "  -t, --expire-time=TIME   Specifies the timeout in ms to expire the notification\n"
            "  -a, --app-name=APP_NAME  Specifies the app name for the icon\n"
@@ -75,6 +76,7 @@ int main(int argc, char **argv)
         { "urgency", required_argument, 0, 'u' },
         { "expire", required_argument, 0, 't' },
         { "app-name", required_argument, 0, 'a' },
+        { "id-file", required_argument, 0, 'R' },
         { "icon", required_argument, 0, 'i' },
         { "category", required_argument, 0, 'c' },
         { 0, 0, 0, 0 }
@@ -88,7 +90,7 @@ int main(int argc, char **argv)
     data = notif_create_data();
 
     /* options */
-    while ((opt = getopt_long(argc, argv,"hvr:u:t:a:i:c:", options, NULL )) != -1) {
+    while ((opt = getopt_long(argc, argv,"hvr:R:u:t:a:i:c:", options, NULL )) != -1) {
         switch (opt) {
         case 'h' :
             show_help();
@@ -101,9 +103,27 @@ int main(int argc, char **argv)
             return 0;
 
         case 'r':
+            if (notif_get_id_file(data) != NULL) {
+                printf("-r and -R are incompatible options\n");
+                goto error;
+            }
             notif_set_replaces_id(data, atoi(optarg));
             break;
 
+        case 'R': {
+            if (notif_get_replaces_id(data) != 0) {
+                printf("-r and -R are incompatible options\n");
+                goto error;
+            }
+            FILE *file = fopen(optarg, "r+");
+            if (file == NULL) {
+                perror("Could not open the id_file");
+                goto error;
+            }
+            notif_set_id_file(data, file);
+            notif_set_replaces_id_from_file(data);
+            break;
+        }
         case 'u':
             urgency = parse_urgency(optarg);
             if (urgency == NOTIF_ERROR) {
@@ -161,7 +181,7 @@ int main(int argc, char **argv)
             goto error;
         }
         else {
-            printf("%i\n", id);
+            fprintf(notif_get_id_file(data), "%i\n", id);
         }
     }
 
