@@ -27,6 +27,7 @@ struct NotifyData {
     unsigned int replaces_id;
     unsigned char urgency;
     int expire_time;
+    FILE *id_file;
 
     char *app_name;
     char *icon;
@@ -45,6 +46,7 @@ struct NotifyData *notif_create_data(void)
     data->expire_time = -1;
     data->app_name = NULL;
     data->icon = NULL;
+    data->id_file = stdout;
     data->category = NULL;
     data->summary = NULL;
     data->body = NULL;
@@ -56,6 +58,9 @@ void notif_free_data(struct NotifyData *data)
 {
     if (data == NULL)
         return;
+
+    if (data->id_file != NULL)
+        fclose(data->id_file);
 
     free(data->app_name);
     free(data->icon);
@@ -69,6 +74,21 @@ void notif_free_data(struct NotifyData *data)
 void notif_set_replaces_id(struct NotifyData *data, unsigned int id)
 {
     data->replaces_id = id;
+}
+
+void notif_set_replaces_id_from_file(struct NotifyData *data)
+{
+    size_t arr_length=0;
+    char* lineptr = NULL;
+    if (getline(&lineptr, &arr_length, data->id_file) == -1 ) {
+        if (!feof(data->id_file)) {
+            perror("Could not read from file");
+            exit(EXIT_FAILURE);
+        }
+    }
+    data->replaces_id = atoi(lineptr);
+    rewind(data->id_file);
+    free(lineptr);
 }
 
 void notif_set_urgency(struct NotifyData *data, unsigned char urgency)
@@ -89,6 +109,11 @@ void notif_set_app_name(struct NotifyData *data, const char *name)
 void notif_set_icon(struct NotifyData *data, const char *icon)
 {
     data->icon = strdup(icon);
+}
+
+void notif_set_id_file(struct NotifyData *data, FILE *file)
+{
+    data->id_file = file;
 }
 
 void notif_set_category(struct NotifyData *data, const char *category)
@@ -129,6 +154,11 @@ const char *notif_get_app_name(struct NotifyData *data)
 const char *notif_get_icon(struct NotifyData *data)
 {
     return data->icon;
+}
+
+FILE *notif_get_id_file(struct NotifyData *data)
+{
+    return data->id_file;
 }
 
 const char *notif_get_category(struct NotifyData *data)
