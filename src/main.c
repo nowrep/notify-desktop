@@ -103,7 +103,7 @@ int main(int argc, char **argv)
             return 0;
 
         case 'r':
-            if (notif_get_id_file(data) != NULL) {
+            if (notif_get_id_file(data) != stdout) {
                 printf("-r and -R are incompatible options\n");
                 goto error;
             }
