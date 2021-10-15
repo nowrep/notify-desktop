@@ -46,7 +46,7 @@ struct NotifyData *notif_create_data(void)
     data->expire_time = -1;
     data->app_name = NULL;
     data->icon = NULL;
-    data->id_file = stdout;
+    data->id_file = NULL;
     data->category = NULL;
     data->summary = NULL;
     data->body = NULL;
